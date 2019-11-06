@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">SmartRestaurant</string>
+    <string name="pls_focus_on_qr_code">Pls, Focus on QR Code</string>
+    <string name="go_to_scan_code">GO to scan code</string>
+    <string name="go_to_login">Go to login</string>
+</resources>
