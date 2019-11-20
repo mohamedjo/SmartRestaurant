@@ -1,9 +1,9 @@
 package com.jo.android.smartrestaurant;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +41,12 @@ public class QrReaderActivity extends AppCompatActivity {
                             @Override
                             public void handleResult(Result rawResult) {
 
-                                Log.e("Result",rawResult.getText());
-                                Intent intent = new Intent(QrReaderActivity.this,UserMenuActivity.class);
-                                intent.putExtra("QR Result",rawResult.getText());
-                                startActivity(intent);
+                                String qrContent =rawResult.getText().toString();
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra(UserHomeActivity.QR_CONTENT,qrContent);
+                                setResult(Activity.RESULT_OK,returnIntent);
+                               // Toast.makeText(QrReaderActivity.this, rawResult.getText().toString(), Toast.LENGTH_SHORT).show();
+                                finish();
                             }
                         });
                         scanner.startCamera();

@@ -19,16 +19,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".UserMenuActivity"></activity>
-        <activity android:name=".QrReaderActivity" />
-        <activity android:name=".LoginActvity"/>
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MenuActivity"></activity>
+        <activity
+            android:name=".UserHomeActivity"
+            android:label="@string/title_activity_user_home"
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".CreateNewAccountActivity"
+            android:label="Create New Account" />
+        <activity android:name=".QrReaderActivity" />
+        <activity android:name=".LoginActvity">
+
+        </activity>
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
