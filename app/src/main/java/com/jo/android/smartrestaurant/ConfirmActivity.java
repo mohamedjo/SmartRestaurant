@@ -52,7 +52,7 @@ public class ConfirmActivity extends AppCompatActivity {
                 payWay=CASH;
             }
         });
-
+///25252
         radioButtonCridet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
