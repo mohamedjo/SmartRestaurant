@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import io.paperdb.Paper;
 
@@ -161,7 +167,9 @@ public class UserHomeActivity extends AppCompatActivity
         if(requestCode==REQUEST_QR_READER)
         {
           restaurantId=data.getStringExtra(QR_CONTENT);
-          hideAndDesplay();
+          MyData.RESTAURANT_ID=restaurantId;
+            getResturantName();
+            desplayMenu();
 
 
         }
@@ -213,12 +221,14 @@ public class UserHomeActivity extends AppCompatActivity
 
         startActivity(intent);
     }
-    private void  hideAndDesplay(){
+    private void desplayMenu(){
 
 
         textViewAscScan.setVisibility(View.GONE);
         buttonScan.setVisibility(View.GONE);
         linearLayoutCategory.setVisibility(View.VISIBLE);
+        Toast.makeText(this, MyData.RESTAURANT_NAME, Toast.LENGTH_SHORT).show();
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -230,6 +240,8 @@ public class UserHomeActivity extends AppCompatActivity
         if (id == R.id.nav_menu) {
             // Handle the camera action
         } else if (id == R.id.nav_orders) {
+
+            sendToCartActvity();
 
         } else if (id == R.id.nav_offers) {
 
@@ -244,6 +256,42 @@ public class UserHomeActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+    }
+
+    private void sendToCartActvity() {
+        Intent intent=new Intent(UserHomeActivity.this,CartActivity.class);
+        finish();
+
+        startActivity(intent);
+
+    }
+
+    private void getResturantName(){
+        FirebaseDatabase.getInstance().getReference().child("restaurant")
+                .child(MyData.RESTAURANT_ID).child("tittle").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    textViewRestuarantName.setText(dataSnapshot.getValue(String.class));
+                    MyData.RESTAURANT_NAME=dataSnapshot.getValue(String.class);
+
+                }
+                else{
+                    Toast.makeText(UserHomeActivity.this, " no data founded", Toast.LENGTH_SHORT).show();
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
     }
 

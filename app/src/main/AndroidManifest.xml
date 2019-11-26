@@ -35,9 +35,14 @@
             android:label="Create New Account" />
         <activity android:name=".QrReaderActivity" />
         <activity android:name=".LoginActvity">
-
         </activity>
+        <activity android:name=".ItemDetailsActivity"/>
+
+        <activity android:name=".CartActivity"
+            android:label="Cart"/>
         <activity android:name=".MainActivity" />
+        <activity android:name=".ConfirmActivity"
+            android:label="Checkout"/>
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"

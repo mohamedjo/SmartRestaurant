@@ -24,18 +24,22 @@ import static com.jo.android.smartrestaurant.UserHomeActivity.CATEGORY_TITTLE_KE
 import static com.jo.android.smartrestaurant.UserHomeActivity.RESTAURANT_ID_KEY;
 
 public class MenuActivity extends AppCompatActivity {
-   private RecyclerView recyclerViewItems;
+
+    public static final String ITEM_ID_KEY = "item_id";
+
+    private RecyclerView recyclerViewItems;
 
     private DatabaseReference itemReference;
     private TextView textViewCategoryTittle;
+    private String whichPart,restaurant_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         Intent intent=getIntent();
-        String whichPart=intent.getStringExtra(CATEGORY_TITTLE_KEY);
-        String restaurant_id=intent.getStringExtra(RESTAURANT_ID_KEY);
+         whichPart=intent.getStringExtra(CATEGORY_TITTLE_KEY);
+         restaurant_id=intent.getStringExtra(RESTAURANT_ID_KEY);
         Toast.makeText(this, whichPart, Toast.LENGTH_SHORT).show();
         recyclerViewItems=findViewById(R.id.recycler_view_iten);
         textViewCategoryTittle=findViewById(R.id.tv_category_tittle);
@@ -61,11 +65,20 @@ public class MenuActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull ItemViewHolder holder, int position, @NonNull Item model) {
+            protected void onBindViewHolder(@NonNull ItemViewHolder holder, final int position, @NonNull Item model) {
 
                 holder.textViewNAme.setText(model.getName());
                 holder.textViewDescription.setText(model.getDescription());
                 holder.buttonPrice.setText("EGP "+model.getPrice());
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                       String item_id= getRef(position).getKey();
+                        sendToItemDetailsActivity(item_id);
+                    }
+                });
 
 
             }
@@ -73,5 +86,18 @@ public class MenuActivity extends AppCompatActivity {
         recyclerViewItems.setAdapter(adapter);
         adapter.startListening();
 
+    }
+
+    private void sendToItemDetailsActivity(String item_id) {
+
+        Intent intent=new Intent(MenuActivity.this,ItemDetailsActivity.class);
+        intent.putExtra(CATEGORY_TITTLE_KEY,whichPart);
+        intent.putExtra(RESTAURANT_ID_KEY,restaurant_id);
+        intent.putExtra(ITEM_ID_KEY,item_id);
+
+
+
+
+        startActivity(intent);
     }
 }
