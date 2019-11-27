@@ -19,30 +19,39 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".MenuActivity"></activity>
+        <activity
+            android:name=".ManagerHomeActivity"
+            android:label="@string/title_activity_manager_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MenuActivity" />
         <activity
             android:name=".UserHomeActivity"
             android:label="@string/title_activity_user_home"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".CreateNewAccountActivity"
+            android:label="Create New Account" />
+        <activity android:name=".QrReaderActivity" />
+        <activity android:name=".LoginActvity" android:label="Login">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ItemDetailsActivity" />
         <activity
-            android:name=".CreateNewAccountActivity"
-            android:label="Create New Account" />
-        <activity android:name=".QrReaderActivity" />
-        <activity android:name=".LoginActvity">
-        </activity>
-        <activity android:name=".ItemDetailsActivity"/>
-
-        <activity android:name=".CartActivity"
-            android:label="Cart"/>
+            android:name=".CartActivity"
+            android:label="Cart" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ConfirmActivity"
-            android:label="Checkout"/>
+        <activity android:name=".ManagerLoginActivity"
+            android:label="Manager Login"/>
+        <activity
+            android:name=".ConfirmActivity"
+            android:label="Checkout" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"

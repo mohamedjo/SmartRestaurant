@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.regex.Pattern;
+
 import io.paperdb.Paper;
 
 import static com.jo.android.smartrestaurant.MainActivity.USER_EMAIL;
@@ -25,11 +27,13 @@ import static com.jo.android.smartrestaurant.MainActivity.USER_PASSWORD;
 public class LoginActvity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private String sentCode;
+
     private EditText editTextEmail, editTextPassword;
     private Button buttonLogin;
     private TextView textViewNewAccount;
     private ProgressBar progressBar;
+    private TextView goToManagerLogin;
+
 
 
     @Override
@@ -44,6 +48,7 @@ public class LoginActvity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.edit_text_email);
         editTextPassword = findViewById(R.id.edit_text_password);
         progressBar = findViewById(R.id.progres_bar_login);
+        goToManagerLogin = findViewById(R.id.tv_go_to_manager);
 
         textViewNewAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,14 +61,26 @@ public class LoginActvity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                login();
-
+                if(isValidate()){
+                    login();
+                }else{
+                    Toast.makeText(LoginActvity.this, "you must enter email and password", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        goToManagerLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToManagerLogin();
             }
         });
 
     }
 
-
+    private void sendToManagerLogin(){
+        Intent intent = new Intent(LoginActvity.this,ManagerLoginActivity.class);
+        startActivity(intent);
+    }
 
     private void login() {
         progressBar.setVisibility(View.VISIBLE);
@@ -105,6 +122,41 @@ public class LoginActvity extends AppCompatActivity {
         Intent intent = new Intent(LoginActvity.this, CreateNewAccountActivity.class);
 
         startActivity(intent);
+    }
+    private boolean isValidate() {
+        boolean isValid= true;
+        String email = editTextEmail.getText().toString();
+        String password = editTextPassword.getText().toString();
+
+        if(email.trim().isEmpty()){
+            editTextEmail.setError("Required");
+            isValid=false;
+        }
+        else if (!(isValidEmail(email))){
+            editTextEmail.setError("please enter a valid Email");
+            isValid = false;
+        }else{
+            editTextEmail.setError(null);
+        }
+
+        if(password.trim().isEmpty()){
+            editTextPassword.setError("Required");
+            isValid=false;
+        }else if(password.length() < 6 ){
+            editTextPassword.setError("password must be 6 characters");
+            isValid=false;
+        }else{
+            editTextPassword.setError(null);
+        }
+        return isValid;
+    }
+    private boolean isValidEmail(String email) {
+        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
     }
 
 

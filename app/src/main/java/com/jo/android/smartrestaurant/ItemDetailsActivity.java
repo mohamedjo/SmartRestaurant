@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,13 +26,13 @@ import static com.jo.android.smartrestaurant.UserHomeActivity.RESTAURANT_ID_KEY;
 public class ItemDetailsActivity extends AppCompatActivity {
 
     private TextView textViewName,textViewDescription,textViewPrice,textViewQuntity;
-    private DatabaseReference itemReference,cartListReference;
+    private DatabaseReference itemReference,cartListReference,tableReference;
     private ImageView imageViewCose;
     private Button buttonDec,buttoninc, buttonAddToCart;
     int quntity=1;
-    String restaurantId;
-    String whichPart;
-    String itemId;
+    private String restaurantId;
+    private String whichPart;
+    private String itemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
        cartListReference=FirebaseDatabase.getInstance().getReference().child("user_cart")
                 .child("SivWgWsKqWOwIl3cUK81gwqeHIg2");
+        tableReference=FirebaseDatabase.getInstance().getReference().child("tables")
+                .child("0123456789").child("2");
 
         imageViewCose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,9 +113,21 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     private void addItemToCard() {
         String id=cartListReference.push().getKey();
-        ItemInCart itemInOrder=new ItemInCart(id,whichPart,itemId,quntity);
+        final ItemInCart itemInOrder=new ItemInCart(id,whichPart,itemId,quntity);
 
-        cartListReference.child(id).setValue(itemInOrder);
+        cartListReference.child(id).setValue(itemInOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    tableReference.child("user_id").setValue("SivWgWsKqWOwIl3cUK81gwqeHIg2");
+                    String idInTable=tableReference.push().getKey();
+
+
+                 tableReference.child("orders").child(idInTable).setValue(itemInOrder);
+                }
+            }
+        });
+
 
         finish();
 
