@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jo.android.smartrestaurant.data.UserData;
 import com.jo.android.smartrestaurant.model.Item;
 import com.jo.android.smartrestaurant.model.ItemInCart;
 
@@ -54,9 +55,9 @@ public class ItemDetailsActivity extends AppCompatActivity {
         buttonAddToCart =findViewById(R.id.button_add_to_cart);
 
        cartListReference=FirebaseDatabase.getInstance().getReference().child("user_cart")
-                .child("SivWgWsKqWOwIl3cUK81gwqeHIg2");
+                .child(UserData.USER_ID);
         tableReference=FirebaseDatabase.getInstance().getReference().child("tables")
-                .child("0123456789").child("2");
+                .child(UserData.RESTAURANT_ID).child(UserData.TABLE_NUMBER+"");
 
         imageViewCose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +81,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         buttonAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addItemToCard();
+                addItemToCart();
             }
         });
 
@@ -111,7 +112,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
     }
 
-    private void addItemToCard() {
+    private void addItemToCart() {
         String id=cartListReference.push().getKey();
         final ItemInCart itemInOrder=new ItemInCart(id,whichPart,itemId,quntity);
 
@@ -119,11 +120,11 @@ public class ItemDetailsActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    tableReference.child("user_id").setValue("SivWgWsKqWOwIl3cUK81gwqeHIg2");
+                    tableReference.child("user_id").setValue(UserData.USER_ID);
                     String idInTable=tableReference.push().getKey();
 
-
                  tableReference.child("orders").child(idInTable).setValue(itemInOrder);
+                 tableReference.child("table_num").setValue(UserData.TABLE_NUMBER);
                 }
             }
         });

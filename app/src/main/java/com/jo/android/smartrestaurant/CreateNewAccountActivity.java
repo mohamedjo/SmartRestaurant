@@ -96,7 +96,7 @@ public class CreateNewAccountActivity extends AppCompatActivity {
 
     private void sendUserTologonActivity() {
         Intent intent=new Intent(CreateNewAccountActivity.this,LoginActvity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 }

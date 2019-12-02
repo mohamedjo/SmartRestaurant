@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jo.android.smartrestaurant.data.UserData;
 import com.jo.android.smartrestaurant.model.Item;
 import com.jo.android.smartrestaurant.model.ItemInCart;
 import com.jo.android.smartrestaurant.viewholders.CartItemViewHolder;
@@ -50,8 +51,8 @@ public class CartActivity extends AppCompatActivity {
         buttonAddItems = findViewById(R.id.button_add_new_item);
 
         cartListReference = FirebaseDatabase.getInstance().getReference().child("user_cart")
-                .child("SivWgWsKqWOwIl3cUK81gwqeHIg2");
-        menuReference = FirebaseDatabase.getInstance().getReference().child("menus").child("0123456789");
+                .child(UserData.USER_ID);
+        menuReference = FirebaseDatabase.getInstance().getReference().child("menus").child(UserData.RESTAURANT_ID);
 
         itemInCartList = new ArrayList<>();
         final CartAdapter adapter = new CartAdapter(itemInCartList);

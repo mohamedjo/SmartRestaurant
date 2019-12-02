@@ -16,13 +16,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.jo.android.smartrestaurant.data.UserData;
 
 import java.util.regex.Pattern;
 
 import io.paperdb.Paper;
 
-import static com.jo.android.smartrestaurant.MainActivity.USER_EMAIL;
-import static com.jo.android.smartrestaurant.MainActivity.USER_PASSWORD;
+
 
 public class LoginActvity extends AppCompatActivity {
 
@@ -92,8 +92,7 @@ public class LoginActvity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    Paper.book().write(USER_EMAIL,email);
-                    Paper.book().write(USER_PASSWORD,password);
+                    UserData.USER_ID=FirebaseAuth.getInstance().getUid();
 
                     sendToUserHomeActivity();
 

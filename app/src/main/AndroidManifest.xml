@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -19,10 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
+        <activity android:name=".TableDetailsActivity"
+            android:label="Tables"></activity>
         <activity
             android:name=".ManagerHomeActivity"
-            android:label="@string/title_activity_manager_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="Manager Home"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".MenuActivity" />
         <activity
             android:name=".UserHomeActivity"
@@ -34,8 +39,9 @@
             android:name=".CreateNewAccountActivity"
             android:label="Create New Account" />
         <activity android:name=".QrReaderActivity" />
-        <activity android:name=".LoginActvity" android:label="Login">
-
+        <activity
+            android:name=".LoginActvity"
+            android:label="Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,9 +52,9 @@
         <activity
             android:name=".CartActivity"
             android:label="Cart" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ManagerLoginActivity"
-            android:label="Manager Login"/>
+        <activity
+            android:name=".ManagerLoginActivity"
+            android:label="Manager Login" />
         <activity
             android:name=".ConfirmActivity"
             android:label="Checkout" />

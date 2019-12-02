@@ -24,11 +24,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jo.android.smartrestaurant.data.UserData;
 
-import io.paperdb.Paper;
-
-import static com.jo.android.smartrestaurant.MainActivity.USER_EMAIL;
-import static com.jo.android.smartrestaurant.MainActivity.USER_PASSWORD;
 
 public class UserHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +40,8 @@ public class UserHomeActivity extends AppCompatActivity
     private TextView textViewAscScan;
     private LinearLayout linearLayoutCategory;
     private TextView textViewRestuarantName,textViewMeals,textViewSandwitches,textViewPizza, textViewPasta,textViewSalat,textViewDrinks,textViewrecommendation;
+
+    private TextView textViewUserName;
 
     private String restaurantId;
 
@@ -123,7 +122,7 @@ public class UserHomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                sendToMenuActivity("salats");
+                sendToMenuActivity("salads");
             }
         });
         textViewDrinks.setOnClickListener(new View.OnClickListener() {
@@ -166,8 +165,11 @@ public class UserHomeActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==REQUEST_QR_READER)
         {
-          restaurantId=data.getStringExtra(QR_CONTENT);
-          MyData.RESTAURANT_ID=restaurantId;
+          String qrContent=data.getStringExtra(QR_CONTENT);
+          String[] contentArray=qrContent.split(" ");
+          restaurantId=contentArray[0];
+          UserData.RESTAURANT_ID=restaurantId;
+          UserData.TABLE_NUMBER=Integer.valueOf(contentArray[1]);
             getResturantName();
             desplayMenu();
 
@@ -209,9 +211,7 @@ public class UserHomeActivity extends AppCompatActivity
     }
 
     private void removeUserInfo() {
-        Paper.init(this);
-        Paper.book().write(USER_EMAIL,"");
-        Paper.book().write(USER_PASSWORD,"");
+
 
     }
 
@@ -227,7 +227,7 @@ public class UserHomeActivity extends AppCompatActivity
         textViewAscScan.setVisibility(View.GONE);
         buttonScan.setVisibility(View.GONE);
         linearLayoutCategory.setVisibility(View.VISIBLE);
-        Toast.makeText(this, MyData.RESTAURANT_NAME, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, UserData.RESTAURANT_NAME, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -261,20 +261,18 @@ public class UserHomeActivity extends AppCompatActivity
 
     private void sendToCartActvity() {
         Intent intent=new Intent(UserHomeActivity.this,CartActivity.class);
-        finish();
-
         startActivity(intent);
 
     }
 
     private void getResturantName(){
         FirebaseDatabase.getInstance().getReference().child("restaurant")
-                .child(MyData.RESTAURANT_ID).child("tittle").addValueEventListener(new ValueEventListener() {
+                .child(UserData.RESTAURANT_ID).child("tittle").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                     textViewRestuarantName.setText(dataSnapshot.getValue(String.class));
-                    MyData.RESTAURANT_NAME=dataSnapshot.getValue(String.class);
+                    UserData.RESTAURANT_NAME=dataSnapshot.getValue(String.class);
 
                 }
                 else{

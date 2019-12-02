@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jo.android.smartrestaurant.data.ManagerData;
 
 import java.util.regex.Pattern;
 
@@ -72,6 +73,7 @@ public class ManagerLoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        finish();
     }
 
 
@@ -111,7 +113,10 @@ public class ManagerLoginActivity extends AppCompatActivity {
     private void sendToUserLoginActivity() {
         Intent intent = new Intent(ManagerLoginActivity.this, LoginActvity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
         startActivity(intent);
+        finish();
+
     }
 
 
@@ -134,6 +139,8 @@ public class ManagerLoginActivity extends AppCompatActivity {
                         if(dataSnapshot.exists()){
                             String savedPassword=dataSnapshot.child("password").getValue(String.class);
                             if(password.equals(savedPassword)){
+                                ManagerData.RESTAURANT_PHONE=restaurantPhone;
+                                ManagerData.MANAGER_NAME=managerName;
                                 sendToManagerHomeActivity();
                             }
                             else {
