@@ -23,13 +23,14 @@ import com.jo.android.smartrestaurant.viewholders.ItemViewHolder;
 import static com.jo.android.smartrestaurant.UserHomeActivity.CATEGORY_TITTLE_KEY;
 import static com.jo.android.smartrestaurant.UserHomeActivity.RESTAURANT_ID_KEY;
 
+
 public class MenuActivity extends AppCompatActivity {
 
     public static final String ITEM_ID_KEY = "item_id";
 
     private RecyclerView recyclerViewItems;
 
-    private DatabaseReference itemReference;
+    private DatabaseReference itemReference,salesCountRef;
     private TextView textViewCategoryTittle;
     private String whichPart,restaurant_id;
 
@@ -39,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
         Intent intent=getIntent();
          whichPart=intent.getStringExtra(CATEGORY_TITTLE_KEY);
+
          restaurant_id=intent.getStringExtra(RESTAURANT_ID_KEY);
         Toast.makeText(this, whichPart, Toast.LENGTH_SHORT).show();
         recyclerViewItems=findViewById(R.id.recycler_view_iten);

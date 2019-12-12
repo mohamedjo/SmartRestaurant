@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DayBestSelesActivity">
+    <TextView
+        android:id="@+id/tv_display_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="4-12-2019  bestSales"
+        android:textColor="@color/colorPrimaryDark"
+
+        android:gravity="center"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_best_sales"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+    <Button
+        android:id="@+id/button_choose_date"
+        android:layout_width="match_parent"
+        android:layout_margin="22dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_style"
+        android:text="chose day"
+        android:textColor="#fff"
+        android:textSize="22sp"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"/>
+
+
+</LinearLayout>

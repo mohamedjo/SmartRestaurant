@@ -3,6 +3,7 @@ package com.jo.android.smartrestaurant;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,12 +20,15 @@ import com.jo.android.smartrestaurant.fragments.TablesFragment;
 public class ManagerHomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private TextView textViewManagerName,textViewRestaurantName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -35,6 +39,8 @@ public class ManagerHomeActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
         displayItemsOnManagerHomeActivity(R.id.nav_table);
+
+
     }
 
     @Override

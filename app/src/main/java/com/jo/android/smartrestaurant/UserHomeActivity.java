@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +38,8 @@ public class UserHomeActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private Button buttonScan;
     private TextView textViewAscScan;
-    private LinearLayout linearLayoutCategory;
-    private TextView textViewRestuarantName,textViewMeals,textViewSandwitches,textViewPizza, textViewPasta,textViewSalat,textViewDrinks,textViewrecommendation;
+    private ScrollView scrollViewCategory;
+    private TextView textViewRestuarantName,textViewOffers,textViewMeals,textViewSandwitches,textViewPizza, textViewPasta,textViewSalat,textViewDrinks,textViewrecommendation;
 
     private TextView textViewUserName;
 
@@ -53,7 +53,7 @@ public class UserHomeActivity extends AppCompatActivity
         mAuth=FirebaseAuth.getInstance();
         setSupportActionBar(toolbar);
         buttonScan=findViewById(R.id.button_scan);
-        linearLayoutCategory=findViewById(R.id.catagory_list);
+        scrollViewCategory=findViewById(R.id.catagory_list);
         textViewAscScan=findViewById(R.id.tv_ask_scan);
 
         textViewRestuarantName=findViewById(R.id.tv_restaurant_name);
@@ -64,6 +64,7 @@ public class UserHomeActivity extends AppCompatActivity
         textViewSalat=findViewById(R.id.tv_salat);
         textViewDrinks=findViewById(R.id.tv_drinks);
         textViewRestuarantName=findViewById(R.id.tv_restaurant_name);
+        textViewOffers=findViewById(R.id.tv_offers);
         textViewrecommendation=findViewById(R.id.tv_Recommendation);
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +133,27 @@ public class UserHomeActivity extends AppCompatActivity
                 sendToMenuActivity("drinks");
             }
         });
+        textViewOffers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                sendToMenuActivity("offers");
+            }
+        });
+        textViewrecommendation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendToRecommendationActivity();
+            }
+        });
+
+
+    }
+
+    private void sendToRecommendationActivity() {
+        Intent intent = new Intent(UserHomeActivity.this, RecommendationActivity.class);
+
+        startActivity(intent);
     }
 
     private void sendToMenuActivity(String menePart) {
@@ -226,7 +247,7 @@ public class UserHomeActivity extends AppCompatActivity
 
         textViewAscScan.setVisibility(View.GONE);
         buttonScan.setVisibility(View.GONE);
-        linearLayoutCategory.setVisibility(View.VISIBLE);
+        scrollViewCategory.setVisibility(View.VISIBLE);
         Toast.makeText(this, UserData.RESTAURANT_NAME, Toast.LENGTH_SHORT).show();
 
     }
@@ -244,6 +265,7 @@ public class UserHomeActivity extends AppCompatActivity
             sendToCartActvity();
 
         } else if (id == R.id.nav_offers) {
+
 
         }
 
@@ -271,7 +293,7 @@ public class UserHomeActivity extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    textViewRestuarantName.setText(dataSnapshot.getValue(String.class));
+                    textViewRestuarantName.setText(dataSnapshot.getValue(String.class)+" restaurant");
                     UserData.RESTAURANT_NAME=dataSnapshot.getValue(String.class);
 
                 }

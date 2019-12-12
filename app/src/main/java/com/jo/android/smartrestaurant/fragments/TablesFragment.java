@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jo.android.smartrestaurant.R;
 import com.jo.android.smartrestaurant.TableDetailsActivity;
+import com.jo.android.smartrestaurant.data.ManagerData;
 import com.jo.android.smartrestaurant.viewholders.TableViewHolder;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class TablesFragment extends Fragment {
         recyclerViewTables.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewTables.setHasFixedSize(true);
 
-        tablesRef = FirebaseDatabase.getInstance().getReference().child("tables").child("0123456789");
+        tablesRef = FirebaseDatabase.getInstance().getReference().child("tables").child(ManagerData.RESTAURANT_PHONE);
         tablesNumbersList = new ArrayList<>();
         loadTablesNumbersHaveOrders();
 
@@ -62,20 +63,26 @@ public class TablesFragment extends Fragment {
 
     private void loadTablesNumbersHaveOrders() {
 
-        tablesRef.addValueEventListener(new ValueEventListener() {
+        tablesRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                tablesNumbersList.clear();
 
-                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                if(dataSnapshot.exists()) {
+                    tablesNumbersList.clear();
 
-                    long tableNum = dataSnapshot1.child("table_num").getValue(Long.class);
+                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                    tablesNumbersList.add(tableNum);
+                        if (dataSnapshot1.exists()) {
 
+                            long tableNum = dataSnapshot1.child("table_num").getValue(Long.class);
+
+                            tablesNumbersList.add(tableNum);
+                        }
+                    }
+                    TableAdapter adapter = new TableAdapter(tablesNumbersList);
+                    recyclerViewTables.setAdapter(adapter);
                 }
-                TableAdapter adapter = new TableAdapter(tablesNumbersList);
-                recyclerViewTables.setAdapter(adapter);
+
             }
 
             @Override

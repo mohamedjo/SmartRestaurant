@@ -35,7 +35,7 @@ public class CartActivity extends AppCompatActivity {
     private DatabaseReference cartListReference;
     private DatabaseReference menuReference;
     private List<ItemInCart> itemInCartList;
-    private TextView textViewSubTotal;
+    private TextView textViewSubTotal,textViewRestaurantName;
     private Button buttonCheckOut, buttonAddItems;
 
 
@@ -46,63 +46,48 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         recyclerViewCart = findViewById(R.id.rv_cart);
-        textViewSubTotal = findViewById(R.id.tv_subtotal);
         buttonCheckOut = findViewById(R.id.button_checkout);
         buttonAddItems = findViewById(R.id.button_add_new_item);
+        textViewRestaurantName = findViewById(R.id.tv_restaurant_name_in_cart);
+        if(!UserData.RESTAURANT_ID.equals("")&&UserData.RESTAURANT_ID!=null) {
 
-        cartListReference = FirebaseDatabase.getInstance().getReference().child("user_cart")
-                .child(UserData.USER_ID);
-        menuReference = FirebaseDatabase.getInstance().getReference().child("menus").child(UserData.RESTAURANT_ID);
+            textViewRestaurantName.setText(UserData.RESTAURANT_NAME);
+            cartListReference = FirebaseDatabase.getInstance().getReference().child("user_cart")
+                    .child(UserData.USER_ID);
+            menuReference = FirebaseDatabase.getInstance().getReference().child("menus").child(UserData.RESTAURANT_ID);
 
-        itemInCartList = new ArrayList<>();
-        final CartAdapter adapter = new CartAdapter(itemInCartList);
-        recyclerViewCart.setHasFixedSize(true);
-        recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
+            itemInCartList = new ArrayList<>();
+            final CartAdapter adapter = new CartAdapter(itemInCartList);
+            recyclerViewCart.setHasFixedSize(true);
+            recyclerViewCart.setLayoutManager(new LinearLayoutManager(this));
 
-        cartListReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                int i = 0;
-                itemInCartList.clear();
-                for (DataSnapshot itemSnapShot : dataSnapshot.getChildren()) {
+            cartListReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int i = 0;
+                    itemInCartList.clear();
+                    for (DataSnapshot itemSnapShot : dataSnapshot.getChildren()) {
 
-                    ItemInCart itemInCart = itemSnapShot.getValue(ItemInCart.class);
-                    itemInCartList.add(itemInCart);
+                        ItemInCart itemInCart = itemSnapShot.getValue(ItemInCart.class);
+                        itemInCartList.add(itemInCart);
+
+
+                    }
+                    getSubTotalPrice();
+                    adapter.setItemInCartList(itemInCartList);
+                    recyclerViewCart.setAdapter(adapter);
+
 
 
                 }
-                adapter.setItemInCartList(itemInCartList);
-                recyclerViewCart.setAdapter(adapter);
 
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-       /* FirebaseRecyclerOptions<ItemInCart> options= new FirebaseRecyclerOptions.Builder<ItemInCart>()
-                .setQuery(cartListReference,ItemInCart.class)
-                .build();
-        FirebaseRecyclerAdapter adapter=new FirebaseRecyclerAdapter<ItemInCart, CartItemViewHolder>(options) {
-            @NonNull
-            @Override
-            public CartItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.cart_item,parent,false);
-                CartItemViewHolder viewHolder=new CartItemViewHolder(view);
-                return viewHolder;
-            }
-
-            @Override
-            protected void onBindViewHolder(@NonNull CartItemViewHolder holder, final int position, @NonNull ItemInCart model) {
-
-
-
-            }
-        };
-        recyclerViewCart.setAdapter(adapter);
-        adapter.startListening();*/
+                }
+            });
+        }
 
 
         buttonAddItems.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +106,33 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void getSubTotalPrice() {
+        for(final ItemInCart itemInCart:itemInCartList){
+            String whichPart = itemInCart.getCategory();
+            final String itemId = itemInCart.getItemId();
+            menuReference.child(whichPart).child(itemId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    Item menuItem = dataSnapshot.getValue(Item.class);
+                    int quantity=itemInCart.getQuantity();
+                    long itemPrice=menuItem.getPrice();
+
+                    subtotal=subtotal+quantity*itemPrice;
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }
 
     }
 
@@ -173,10 +185,9 @@ public class CartActivity extends AppCompatActivity {
                         holder.textViewItemPrice.setText("EGP " + price);
                         int quantity = itemInCart.getQuantity();
                         holder.textViewQuantity.setText(quantity + "");
-                        long totalPrice = quantity * price;
-                        holder.textViewTotalPrice.setText("EGP " + totalPrice);
-                        subtotal = subtotal + totalPrice;
-                        textViewSubTotal.setText("EGP " + subtotal);
+                        long itemTotalPrice = quantity * price;
+                        holder.textViewTotalPrice.setText("EGP " + itemTotalPrice);
+
 
 
                     }

@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -100,6 +101,10 @@ public class ItemDetailsActivity extends AppCompatActivity {
                    textViewPrice.setText("EGP "+item.getPrice());
 
 
+               }
+               else {
+
+                   Toast.makeText(ItemDetailsActivity.this, "no data", Toast.LENGTH_SHORT).show();
                }
 
             }

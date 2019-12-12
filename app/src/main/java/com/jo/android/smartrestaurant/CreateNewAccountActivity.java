@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class CreateNewAccountActivity extends AppCompatActivity {
     private Button buttonRegister;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
+    private TextView textViewHaveAccount;
 
 
     @Override
@@ -39,6 +41,7 @@ public class CreateNewAccountActivity extends AppCompatActivity {
         editTextPhoneNumber = findViewById(R.id.edit_text_phone);
         buttonRegister = findViewById(R.id.btn_create_account);
         progressBar = findViewById(R.id.progres_bar_register);
+        textViewHaveAccount=findViewById(R.id.tv_have_account);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -46,6 +49,13 @@ public class CreateNewAccountActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 createNewAccount();
+            }
+        });
+
+        textViewHaveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendUserTologonActivity();
             }
         });
 
@@ -70,15 +80,14 @@ public class CreateNewAccountActivity extends AppCompatActivity {
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                 if(task.isSuccessful()){
-                                     sendUserTologonActivity();
-                                     Toast.makeText(CreateNewAccountActivity.this, "done", Toast.LENGTH_LONG).show();
+                                    if (task.isSuccessful()) {
+                                        sendUserTologonActivity();
+                                        Toast.makeText(CreateNewAccountActivity.this, "done", Toast.LENGTH_LONG).show();
 
-                                 }
-                                 else{
-                                     Toast.makeText(CreateNewAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(CreateNewAccountActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
 
-                                 }
+                                    }
                                 }
                             });
 
@@ -95,8 +104,7 @@ public class CreateNewAccountActivity extends AppCompatActivity {
     }
 
     private void sendUserTologonActivity() {
-        Intent intent=new Intent(CreateNewAccountActivity.this,LoginActvity.class);
+        Intent intent = new Intent(CreateNewAccountActivity.this, LoginActvity.class);
         startActivity(intent);
-        finish();
     }
 }

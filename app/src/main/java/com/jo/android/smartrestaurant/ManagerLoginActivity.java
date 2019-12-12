@@ -19,8 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jo.android.smartrestaurant.data.ManagerData;
 
-import java.util.regex.Pattern;
-
 public class ManagerLoginActivity extends AppCompatActivity {
 
   private   ProgressBar progressBar;
@@ -73,7 +71,6 @@ public class ManagerLoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
     }
 
 
@@ -113,23 +110,16 @@ public class ManagerLoginActivity extends AppCompatActivity {
     private void sendToUserLoginActivity() {
         Intent intent = new Intent(ManagerLoginActivity.this, LoginActvity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
+
 
     }
 
 
 
 
-    private boolean isValidEmail(String email) {
-        return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$").matcher(email).matches();
-    }
+
     private void managerLogin(){
 
         managerReference.child(restaurantPhone).child(managerName)

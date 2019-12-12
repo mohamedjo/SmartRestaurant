@@ -23,7 +23,6 @@ import java.util.regex.Pattern;
 import io.paperdb.Paper;
 
 
-
 public class LoginActvity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -33,7 +32,6 @@ public class LoginActvity extends AppCompatActivity {
     private TextView textViewNewAccount;
     private ProgressBar progressBar;
     private TextView goToManagerLogin;
-
 
 
     @Override
@@ -61,9 +59,9 @@ public class LoginActvity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(isValidate()){
+                if (isValidate()) {
                     login();
-                }else{
+                } else {
                     Toast.makeText(LoginActvity.this, "you must enter email and password", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -77,8 +75,10 @@ public class LoginActvity extends AppCompatActivity {
 
     }
 
-    private void sendToManagerLogin(){
-        Intent intent = new Intent(LoginActvity.this,ManagerLoginActivity.class);
+    private void sendToManagerLogin() {
+        Intent intent = new Intent(LoginActvity.this, ManagerLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -92,7 +92,7 @@ public class LoginActvity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
 
-                    UserData.USER_ID=FirebaseAuth.getInstance().getUid();
+                    UserData.USER_ID = FirebaseAuth.getInstance().getUid();
 
                     sendToUserHomeActivity();
 
@@ -122,33 +122,34 @@ public class LoginActvity extends AppCompatActivity {
 
         startActivity(intent);
     }
+
     private boolean isValidate() {
-        boolean isValid= true;
+        boolean isValid = true;
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
 
-        if(email.trim().isEmpty()){
+        if (email.trim().isEmpty()) {
             editTextEmail.setError("Required");
-            isValid=false;
-        }
-        else if (!(isValidEmail(email))){
+            isValid = false;
+        } else if (!(isValidEmail(email))) {
             editTextEmail.setError("please enter a valid Email");
             isValid = false;
-        }else{
+        } else {
             editTextEmail.setError(null);
         }
 
-        if(password.trim().isEmpty()){
+        if (password.trim().isEmpty()) {
             editTextPassword.setError("Required");
-            isValid=false;
-        }else if(password.length() < 6 ){
+            isValid = false;
+        } else if (password.length() < 6) {
             editTextPassword.setError("password must be 6 characters");
-            isValid=false;
-        }else{
+            isValid = false;
+        } else {
             editTextPassword.setError(null);
         }
         return isValid;
     }
+
     private boolean isValidEmail(String email) {
         return Pattern.compile("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
                 + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"

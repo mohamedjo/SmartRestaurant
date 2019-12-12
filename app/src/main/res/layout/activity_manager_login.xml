@@ -48,7 +48,7 @@
                 android:background="@drawable/edit_text_style"
                 android:drawableLeft="@drawable/ic_phone_black"
                 android:hint="@string/enter_resturant_name"
-                android:inputType="text"
+                android:inputType="number"
                 android:maxLines="1" />
 
             <EditText
