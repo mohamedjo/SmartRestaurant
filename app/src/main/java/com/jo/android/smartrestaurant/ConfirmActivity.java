@@ -1,5 +1,6 @@
 package com.jo.android.smartrestaurant;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -78,6 +79,7 @@ public class ConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 confirmOrders();
+
             }
         });
 
@@ -89,8 +91,16 @@ public class ConfirmActivity extends AppCompatActivity {
         savePayWay();
         storeOrders();
         deleteFromCart();
+        sendToWaiting();
 
         Toast.makeText(this, "the pay way :"+payWay, Toast.LENGTH_SHORT).show();
+    }
+
+    private void sendToWaiting() {
+        Intent intent = new Intent(ConfirmActivity.this, WaitingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void deleteFromCart() {

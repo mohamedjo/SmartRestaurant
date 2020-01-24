@@ -17,6 +17,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.jo.android.smartrestaurant.data.UserData;
 import com.jo.android.smartrestaurant.model.Item;
 import com.jo.android.smartrestaurant.viewholders.ItemViewHolder;
 
@@ -51,7 +52,7 @@ public class MenuActivity extends AppCompatActivity {
         recyclerViewItems.setLayoutManager(new LinearLayoutManager(this));
 
 
-        itemReference= FirebaseDatabase.getInstance().getReference().child("menus").child(restaurant_id)
+        itemReference= FirebaseDatabase.getInstance().getReference().child("menus").child(UserData.RESTAURANT_ID)
                 .child(whichPart);
 
         FirebaseRecyclerOptions<Item> options= new FirebaseRecyclerOptions.Builder<Item>()

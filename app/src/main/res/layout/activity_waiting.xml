@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hedgehog="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".WaitingActivity">
+
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:text="your order in progress "
+        android:gravity="center"
+        android:textSize="32sp"
+        android:textColor="@color/colorBlack"
+        />
+    <com.hedgehog.ratingbar.RatingBar
+        android:id="@+id/ratingbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        hedgehog:clickable="true"
+        hedgehog:halfstart="true"
+        hedgehog:starCount="5"
+        hedgehog:starEmpty="@mipmap/star_empty"
+        hedgehog:starFill="@mipmap/star_full"
+        hedgehog:starHalf="@mipmap/star_half"
+        hedgehog:starImageHeight="90dp"
+        hedgehog:starImageWidth="70dp"
+        hedgehog:starImagePadding="20dp"/>
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_rate"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="Rate"
+        android:textColor="#FFF"
+        android:textSize="22sp"
+
+        android:background="@drawable/submet_button_style"/>
+
+
+
+
+
+</LinearLayout>

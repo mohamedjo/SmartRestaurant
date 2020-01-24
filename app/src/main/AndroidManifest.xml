@@ -20,8 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:appComponentFactory">
-        <activity android:name=".DayBestSelesActivity"
-            android:label="Best Sales"></activity>
+        <activity android:name=".WaitingActivity"></activity>
+        <activity
+            android:name=".DayBestSelesActivity"
+            android:label="Best Sales" />
         <activity
             android:name=".RecommendationActivity"
             android:label="Recommendation" />

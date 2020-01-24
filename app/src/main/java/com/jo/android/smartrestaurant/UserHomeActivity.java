@@ -66,6 +66,10 @@ public class UserHomeActivity extends AppCompatActivity
         textViewRestuarantName=findViewById(R.id.tv_restaurant_name);
         textViewOffers=findViewById(R.id.tv_offers);
         textViewrecommendation=findViewById(R.id.tv_Recommendation);
+        if(UserData.RESTAURANT_ID!=null&&!UserData.RESTAURANT_ID.equals("")){
+            getResturantName();
+            desplayMenu();
+        }
         buttonScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

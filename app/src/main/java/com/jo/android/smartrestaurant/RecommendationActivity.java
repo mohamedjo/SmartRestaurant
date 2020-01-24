@@ -66,7 +66,10 @@ public class RecommendationActivity extends AppCompatActivity {
                 recommendedItemsList.clear();
                 for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
                     ItemInCart pastItem=dataSnapshot1.getValue(ItemInCart.class);
-                    recommendedItemsList.add(pastItem);
+
+                   if(validToAdd(recommendedItemsList,pastItem)) {
+                       recommendedItemsList.add(pastItem);
+                   }
 
                 }
                 recyclerViewRecommendation.setAdapter(adapter);
@@ -80,6 +83,21 @@ public class RecommendationActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private boolean validToAdd(List<ItemInCart> recommendedItemsList, ItemInCart pastItem) {
+
+        for(ItemInCart item:recommendedItemsList){
+            if (pastItem.getCategory().equals(item.getCategory())&&pastItem.getItemId().equals(item.getItemId())){
+
+                return false ;
+
+            }
+
+
+        }
+        return true;
 
     }
 

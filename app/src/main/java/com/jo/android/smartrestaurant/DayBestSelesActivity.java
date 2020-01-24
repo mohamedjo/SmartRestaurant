@@ -47,12 +47,13 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
     private RecyclerView recyclerViewBesSales;
 
     List<Count> itemContslist;
-     String type;
+    String type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day_best_seles);
-         type = getIntent().getStringExtra(TYPE_OF_QUARY);
+        type = getIntent().getStringExtra(TYPE_OF_QUARY);
         recyclerViewBesSales = findViewById(R.id.recycler_view_best_sales);
         recyclerViewBesSales.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewBesSales.setHasFixedSize(true);
@@ -68,7 +69,8 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
         }
 
         if (type.equals("month")) {
-            currentDate =new SimpleDateFormat("MM-yyyy", Locale.getDefault()).format(new Date()); ;
+            currentDate = new SimpleDateFormat("MM-yyyy", Locale.getDefault()).format(new Date());
+            ;
             textViewDisplayDate.setText(currentDate);
             buttonChoseDate.setText("Chose Month");
             loadMonthsSales();
@@ -77,7 +79,7 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
             @Override
             public void onClick(View view) {
 
-             choseDate();
+                choseDate();
             }
         });
 
@@ -97,37 +99,43 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
         monthSalesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                itemContslist.clear();
 
-                for (final DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
-                    final String category = dataSnapshot1.getKey();
+                if (!dataSnapshot.exists()) {
 
-                    monthSalesRef.child(category).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    itemContslist.clear();
+                    BestSalesAdapter adapter = new BestSalesAdapter(itemContslist);
+                    recyclerViewBesSales.setAdapter(adapter);
 
-                            if (!dataSnapshot.exists()) {
-                                Toast.makeText(DayBestSelesActivity.this, "error", Toast.LENGTH_SHORT).show();
+                }else {
+                    itemContslist.clear();
+
+                    for (final DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                        final String category = dataSnapshot1.getKey();
+
+                        monthSalesRef.child(category).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                                for (DataSnapshot dataSnapshot11 : dataSnapshot.getChildren()) {
+                                    String itemId = dataSnapshot11.getKey();
+                                    long count = dataSnapshot11.child("count").getValue(Long.class);
+                                    Count itemCount = new Count(category, itemId, count);
+                                    itemContslist.add(itemCount);
+                                }
+
+                                Collections.sort(itemContslist);
+                                Collections.reverse(itemContslist);
+                                BestSalesAdapter adapter = new BestSalesAdapter(itemContslist);
+                                recyclerViewBesSales.setAdapter(adapter);
                             }
 
-                            for (DataSnapshot dataSnapshot11 : dataSnapshot.getChildren()) {
-                                String itemId = dataSnapshot11.getKey();
-                                long count = dataSnapshot11.child("count").getValue(Long.class);
-                                Count itemCount = new Count(category, itemId, count);
-                                itemContslist.add(itemCount);
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
                             }
-
-                            Collections.sort(itemContslist);
-                            Collections.reverse(itemContslist);
-                            BestSalesAdapter adapter = new BestSalesAdapter(itemContslist);
-                            recyclerViewBesSales.setAdapter(adapter);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                        });
+                    }
                 }
             }
 
@@ -145,7 +153,16 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
         daySalesRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                itemContslist.clear();
+
+                if (!dataSnapshot.exists()) {
+
+                    itemContslist.clear();
+                    BestSalesAdapter adapter = new BestSalesAdapter(itemContslist);
+                    recyclerViewBesSales.setAdapter(adapter);
+
+                } else {
+
+                    itemContslist.clear();
 
                 for (final DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     final String category = dataSnapshot1.getKey();
@@ -169,6 +186,7 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
                             Collections.reverse(itemContslist);
                             BestSalesAdapter adapter = new BestSalesAdapter(itemContslist);
                             recyclerViewBesSales.setAdapter(adapter);
+
                         }
 
                         @Override
@@ -177,6 +195,8 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
                         }
                     });
                 }
+
+            }
             }
 
             @Override
@@ -195,7 +215,7 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        if(type.equals("day")) {
+        if (type.equals("day")) {
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
             String strDate = format.format(c.getTime());
 
@@ -203,7 +223,7 @@ public class DayBestSelesActivity extends AppCompatActivity implements DatePicke
             loadaysSales();
             textViewDisplayDate.setText(strDate);
         }
-        if(type.equals("month")) {
+        if (type.equals("month")) {
             SimpleDateFormat format = new SimpleDateFormat("MM-yyyy");
             String strDate = format.format(c.getTime());
 

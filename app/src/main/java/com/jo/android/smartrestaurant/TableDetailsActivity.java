@@ -47,7 +47,7 @@ public class TableDetailsActivity extends AppCompatActivity {
     private static final int WRITE_EXTRINALE_CODE = 123;
     private TextView textViewTableNumber, textViewCustomerName, textViewTotalAmount;
     private RecyclerView recyclerViewOrders;
-    private DatabaseReference tablesRef, ordersRef, menuRef, daySalesCountRef, monthSalesCountRef, restaurantOrdersRef;
+    private DatabaseReference tablesRef, ordersRef, menuRef, daySalesCountRef, monthSalesCountRef, restaurantOrdersRef,userStateRef;
     private List<OrderItem> orderItemList;
     private Button buttonPrint, buttonCheckout;
     private String customerOrders = "";
@@ -59,6 +59,7 @@ public class TableDetailsActivity extends AppCompatActivity {
     private OrdersAdapter adapter;
     private String customerName;
     private String orderWithPrice = "";
+    private String customer_id;
 
 
     String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
@@ -81,7 +82,7 @@ public class TableDetailsActivity extends AppCompatActivity {
 
         buttonPrint = findViewById(R.id.button_print);
         buttonCheckout = findViewById(R.id.button_manager_checkout);
-        menuRef = FirebaseDatabase.getInstance().getReference().child("menus").child("0123456789");
+        menuRef = FirebaseDatabase.getInstance().getReference().child("menus").child(ManagerData.RESTAURANT_PHONE);
         orderItemList = new ArrayList<>();
         textViewTableNumber = findViewById(R.id.tv_table_number_details);
         textViewCustomerName = findViewById(R.id.tv_customer_name);
@@ -90,6 +91,7 @@ public class TableDetailsActivity extends AppCompatActivity {
         recyclerViewOrders.setHasFixedSize(true);
         textViewTableNumber.setText("" + tableNumber);
         loaduCustomerName();
+
         loadOrdersData();
 
 
@@ -113,10 +115,17 @@ public class TableDetailsActivity extends AppCompatActivity {
         increaseDayCount();
         increaseMonthCount();
         storeDate();
+        makeStateFinished();
         deleteTable();
 
 
 
+
+    }
+
+    private void makeStateFinished() {
+
+        userStateRef.child("state").setValue("finished");
 
     }
 
@@ -359,14 +368,15 @@ public class TableDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
-                    String customer_id = dataSnapshot.getValue(String.class);
+                     customer_id = dataSnapshot.getValue(String.class);
+                    userStateRef=FirebaseDatabase.getInstance().getReference().child("user_state").child(customer_id);
+
                     FirebaseDatabase.getInstance().getReference().child("users").child(customer_id).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             String firstName = dataSnapshot.child("firstName").getValue(String.class);
                             String lastName = dataSnapshot.child("lastName").getValue(String.class);
                             customerName = firstName + " " + lastName;
-
                             textViewCustomerName.setText(firstName + " " + lastName);
                         }
 

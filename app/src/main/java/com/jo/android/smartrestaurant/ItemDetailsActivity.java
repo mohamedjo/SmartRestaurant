@@ -88,7 +88,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
 
 
 
-        itemReference= FirebaseDatabase.getInstance().getReference().child("menus").child(restaurantId)
+        itemReference= FirebaseDatabase.getInstance().getReference().child("menus").child(UserData.RESTAURANT_ID)
                 .child(whichPart);
         itemReference.child(itemId).addValueEventListener(new ValueEventListener() {
             @Override
