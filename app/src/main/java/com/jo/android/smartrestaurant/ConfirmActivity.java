@@ -97,6 +97,10 @@ public class ConfirmActivity extends AppCompatActivity {
     }
 
     private void sendToWaiting() {
+        DatabaseReference userStateRef = FirebaseDatabase.getInstance().getReference().child("user_state").child(UserData.USER_ID);
+
+        userStateRef.child("state").setValue("waiting");
+
         Intent intent = new Intent(ConfirmActivity.this, WaitingActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -45,7 +45,7 @@ public class TableDetailsActivity extends AppCompatActivity {
 
 
     private static final int WRITE_EXTRINALE_CODE = 123;
-    private TextView textViewTableNumber, textViewCustomerName, textViewTotalAmount;
+    private TextView textViewTableNumber, textViewCustomerName;
     private RecyclerView recyclerViewOrders;
     private DatabaseReference tablesRef, ordersRef, menuRef, daySalesCountRef, monthSalesCountRef, restaurantOrdersRef,userStateRef;
     private List<OrderItem> orderItemList;
@@ -86,6 +86,7 @@ public class TableDetailsActivity extends AppCompatActivity {
         orderItemList = new ArrayList<>();
         textViewTableNumber = findViewById(R.id.tv_table_number_details);
         textViewCustomerName = findViewById(R.id.tv_customer_name);
+
         recyclerViewOrders = findViewById(R.id.recycler_view_orders);
         recyclerViewOrders.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewOrders.setHasFixedSize(true);
@@ -435,6 +436,7 @@ public class TableDetailsActivity extends AppCompatActivity {
                     orderWithPrice += orderItem.getQuantity() + "   " + orderItem.getCategory() + "   " + name + "   " + amountPrice + " EGP\n";
 
                 }
+
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {

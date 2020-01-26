@@ -293,7 +293,7 @@ public class UserHomeActivity extends AppCompatActivity
 
     private void getResturantName(){
         FirebaseDatabase.getInstance().getReference().child("restaurant")
-                .child(UserData.RESTAURANT_ID).child("tittle").addValueEventListener(new ValueEventListener() {
+                .child(UserData.RESTAURANT_ID).child("tittle").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
